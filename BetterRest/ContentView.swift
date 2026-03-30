@@ -10,6 +10,8 @@ struct ContentView: View {
     @State private var alertMessage = ""
     @State private var showingAlert = false
     
+    
+    
     static var defaultWakeTime: Date {
         var components = DateComponents()
         components.hour = 7
@@ -20,24 +22,28 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             Form {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("When do you want to wake up?")
-                        .font(.headline)
+                Section("When do you want to wake up?") {
                     DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
                         .labelsHidden()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .listRowBackground(Color.clear)
+
+                    
                 }
                 
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("Desired amount of sleep")
-                        .font(.headline)
+                Section("Desired amount of sleep") {
                     Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
                 }
+                .font(.headline)
                 
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("Daily coffee intake")
-                        .font(.headline)
-                    Stepper("^[\(coffeeAmount) cup](inflect: true)", value: $coffeeAmount, in: 1...20)
+                Section("Daily coffee intake") {
+                    Picker("Number of cups", selection: $coffeeAmount) {
+                        ForEach(1...15, id: \.self) {
+                            Text("^[\($0) cup](inflect: true)")
+                        }
+                    }
                 }
+                .font(.headline)
             }
             
             .navigationTitle("BetterRest")
